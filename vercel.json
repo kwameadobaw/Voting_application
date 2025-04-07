@@ -1,8 +1,14 @@
 {
+  "builds": [
+    {
+      "src": "New_Voting/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "poll/wsgi.py"
+      "dest": "New_Voting/wsgi.py"
     }
   ]
 }
