@@ -141,13 +141,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 # Update these static file settings
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'  # Remove the leading slash
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Make sure you have only one STATICFILES_DIRS definition
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Change the static files storage to a simpler one
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'  # Changed from CompressedManifestStaticFilesStorage
 
 # Add whitenoise for better static file handling
 MIDDLEWARE = [
