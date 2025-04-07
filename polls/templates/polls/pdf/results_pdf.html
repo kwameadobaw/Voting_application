@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Voting Results Summary</title>
+    <style>
+        @page {
+            size: letter portrait;
+            margin: 2cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #4361ee;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .summary {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .summary-item {
+            text-align: center;
+        }
+        .summary-item h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        .summary-item p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .position {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        .position h2 {
+            color: #111827;
+            font-size: 18px;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .position p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .candidates {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .candidates th, .candidates td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .candidates th {
+            background-color: #f9fafb;
+            font-weight: bold;
+            color: #4b5563;
+        }
+        .winner {
+            background-color: #eff6ff;
+        }
+        .winner td:first-child {
+            font-weight: bold;
+            color: #4361ee;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Student Voting System - Results Summary</h1>
+        <p>Generated on {{ generated_date }} at {{ generated_time }}</p>
+    </div>
+    
+    <div class="summary">
+        <div class="summary-grid">
+            <div class="summary-item">
+                <h3>Total Students</h3>
+                <p>{{ total_students }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Votes Cast</h3>
+                <p>{{ voted_students }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Participation</h3>
+                <p>{{ voting_percentage|floatformat:1 }}%</p>
+            </div>
+        </div>
+    </div>
+    
+    {% for result in results_data %}
+    <div class="position">
+        <h2>{{ result.position.title }}</h2>
+        <p>{{ result.position.description }}</p>
+        <p><strong>Total Votes:</strong> {{ result.total_votes }}</p>
+        
+        <table class="candidates">
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Votes</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidate in result.candidates %}
+                <tr {% if forloop.first %}class="winner"{% endif %}>
+                    <td>{{ candidate.name }} {% if forloop.first %}(Winner){% endif %}</td>
+                    <td>{{ candidate.votes }}</td>
+                    <td>{{ candidate.percentage|floatformat:1 }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+    
+    <div class="footer">
+        <p>This is an official document of the Student Voting System.</p>
+    </div>
+</body>
+</html>

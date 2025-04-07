@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Voting System - Login</title>
+    <link rel="stylesheet" href="{% static 'polls/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-image">
+            <div class="overlay"></div>
+            <div class="login-quote">
+                <!-- <img src="{% static 'polls/images/MIT-Polarization-Models-01-press.jpg' %}" alt="Voting Icon" class="quote-image"> -->
+                <h2>"Your vote is your voice. Let it be heard."</h2>
+            </div>
+        </div>
+        
+        <div class="login-form-container">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-vote-yea"></i>
+                </div>
+                <h1>Student Voting System</h1>
+                <p>Cast your vote for the future leaders</p>
+            </div>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                    <i class="fas fa-info-circle"></i> {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="login-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="student_id">
+                            <i class="fas fa-id-card"></i> Student ID
+                        </label>
+                        <input type="text" id="student_id" name="student_id" required placeholder="Enter your student ID">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+            </div>
+            
+            <div class="admin-link">
+                <a href="{% url 'voting_results' %}" class="btn btn-outline">
+                    <i class="fas fa-chart-bar"></i> View Voting Results
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Voting System</title>
+    <link rel="stylesheet" href="{% static 'polls/css/admin.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-vote-yea"></i> Voting System</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><a href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="{% url 'admin:index' %}"><i class="fas fa-cog"></i> Django Admin</a></li>
+                <li><a href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header class="content-header">
+                <h1>Admin Dashboard</h1>
+                <div class="user-info">
+                    <span>Welcome, {{ request.user.username }}</span>
+                </div>
+            </header>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Students</h3>
+                        <p>{{ total_students }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                    <div class="stat-info">
+                        <h3>Students Voted</h3>
+                        <p>{{ voted_students }} ({{ voted_students|floatformat:1|default:0 }}%)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-vote-yea"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Votes</h3>
+                        <p>{{ total_votes }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-list-alt"></i></div>
+                    <div class="stat-info">
+                        <h3>Positions</h3>
+                        <p>{{ positions.count }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Voting Results</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="positions-grid">
+                                    {% for position in positions %}
+                                    <div class="position-card">
+                                        <h3>{{ position.title }}</h3>
+                                        <div class="chart-container">
+                                            <canvas id="chart-{{ position.id }}"></canvas>
+                                        </div>
+                                        <div class="position-details">
+                                            <table class="results-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Candidate</th>
+                                                        <th>Votes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for candidate in position.candidates.all %}
+                                                    <tr>
+                                                        <td>{{ candidate.name }}</td>
+                                                        <td>{{ candidate.votes }}</td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="2">No candidates available</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <a href="{% url 'position_details' position.id %}" class="btn btn-sm">View Details</a>
+                                    </div>
+                                    {% empty %}
+                                    <p>No positions available</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Students</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="student-list">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Student ID</th>
+                                                <th>Name</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in students %}
+                                            <tr class="{% if student.has_voted %}voted{% endif %}">
+                                                <td>{{ student.student_id }}</td>
+                                                <td>{{ student.name }}</td>
+                                                <td>
+                                                    {% if student.has_voted %}
+                                                    <span class="status-badge voted">Voted</span>
+                                                    {% else %}
+                                                    <span class="status-badge not-voted">Not Voted</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="3">No students registered</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="{% static 'polls/js/admin-dashboard.js' %}"></script>
+</body>
+</html>

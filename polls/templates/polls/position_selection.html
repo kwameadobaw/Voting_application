@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast Your Vote - Student Voting System</title>
+    <link rel="stylesheet" href="{% static 'polls/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-vote-yea"></i> Student Voting System</h1>
+            <div class="student-info">
+                <p>Welcome, <span class="student-name">{{ student.name }}</span> (ID: {{ student.student_id }})</p>
+                <a href="{% url 'logout' %}" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        
+        <div class="voting-progress">
+            <div class="progress-bar">
+                <div class="progress" style="width: {% widthratio voted_positions|length positions|length 100 %}%"></div>
+            </div>
+            <p class="progress-text">{{ voted_positions|length }} of {{ positions|length }} positions voted</p>
+        </div>
+        
+        <div class="card voting-card">
+            <h2>Cast Your Vote</h2>
+            
+            {% if next_position %}
+                <div class="next-position">
+                    <h3>Next Position: {{ next_position.title }}</h3>
+                    <p>{{ next_position.description }}</p>
+                    <a href="{% url 'voting' next_position.id %}" class="btn btn-primary">
+                        <i class="fas fa-check-circle"></i> Vote Now
+                    </a>
+                </div>
+            {% endif %}
+            
+            <div class="positions-summary">
+                <h3>Your Voting Progress</h3>
+                <div class="position-list">
+                    {% for position in positions %}
+                    <div class="position-item {% if position.id in voted_positions %}voted{% endif %}">
+                        <div class="position-status">
+                            {% if position.id in voted_positions %}
+                            <i class="fas fa-check-circle"></i>
+                            {% else %}
+                            <i class="fas fa-circle"></i>
+                            {% endif %}
+                        </div>
+                        <div class="position-info">
+                            <h4>{{ position.title }}</h4>
+                            <p>{{ position.description }}</p>
+                        </div>
+                        {% if position.id in voted_positions %}
+                        <span class="status-badge">Voted</span>
+                        {% elif position == next_position %}
+                        <span class="status-badge next">Next</span>
+                        {% else %}
+                        <span class="status-badge pending">Pending</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% if all_voted %}
+            <div class="complete-voting">
+                <a href="{% url 'complete_voting' %}" class="btn btn-success">
+                    <i class="fas fa-paper-plane"></i> Submit All Votes
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Results - Admin Login</title>
+    <link rel="stylesheet" href="{% static 'polls/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-image">
+            <div class="overlay"></div>
+            <div class="login-quote">
+                <h2>"Democracy is not just about the right to vote, but the right to know the results."</h2>
+            </div>
+        </div>
+        
+        <div class="login-form-container">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h1>Voting Results</h1>
+                <p>Enter the admin password to view voting results</p>
+            </div>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                    <i class="fas fa-info-circle"></i> {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="login-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" id="password" name="password" required placeholder="Enter admin password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> View Results
+                    </button>
+                </form>
+            </div>
+            
+            <div class="admin-link">
+                <a href="{% url 'login' %}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Login
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

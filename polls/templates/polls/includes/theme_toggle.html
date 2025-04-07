@@ -1,0 +1,105 @@
+<button id="theme-toggle" class="btn btn-icon" aria-label="Toggle dark mode">
+    <i class="fas fa-moon dark-icon"></i>
+    <i class="fas fa-sun light-icon"></i>
+</button>
+
+<style>
+    /* Theme toggle button */
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--card-bg, white);
+        border: 1px solid var(--border-color, #e5e7eb);
+        color: var(--text-color, #111827);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-icon:hover {
+        background-color: var(--primary-light, #eff6ff);
+        color: var(--primary-color, #4361ee);
+    }
+    
+    .dark-icon, .light-icon {
+        font-size: 18px;
+        transition: opacity 0.3s ease;
+    }
+    
+    .dark-icon {
+        opacity: 1;
+    }
+    
+    .light-icon {
+        opacity: 0;
+        position: absolute;
+    }
+    
+    .dark-mode .dark-icon {
+        opacity: 0;
+    }
+    
+    .dark-mode .light-icon {
+        opacity: 1;
+    }
+    
+    @media (max-width: 768px) {
+        .btn-icon {
+            top: 10px;
+            right: 10px;
+        }
+    }
+</style>
+
+<script>
+    // Theme toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference or use preferred color scheme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            htmlElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            htmlElement.setAttribute('data-theme', 'dark');
+        }
+        
+        // Update button appearance based on current theme
+        updateThemeToggle();
+        
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            updateThemeToggle();
+            
+            // Update charts if they exist
+            if (typeof updateCharts === 'function') {
+                updateCharts();
+            }
+        });
+        
+        function updateThemeToggle() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                themeToggle.classList.add('dark-mode');
+            } else {
+                themeToggle.classList.remove('dark-mode');
+            }
+        }
+    });
+</script>

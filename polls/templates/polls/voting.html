@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for {{ position.title }} - Student Voting System</title>
+    <link rel="stylesheet" href="{% static 'polls/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-vote-yea"></i> Student Voting System</h1>
+            <div class="student-info">
+                <p>Welcome, <span class="student-name">{{ student.name }}</span> (ID: {{ student.student_id }})</p>
+                <a href="{% url 'logout' %}" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        
+        <div class="voting-position-header">
+            <h2>Vote for {{ position.title }}</h2>
+            <p>{{ position.description }}</p>
+        </div>
+        
+        <form method="post" class="voting-form">
+            {% csrf_token %}
+            
+            <div class="candidates-grid">
+                {% for candidate in candidates %}
+                <div class="candidate-card">
+                    <input type="radio" name="candidate" id="candidate-{{ candidate.id }}" value="{{ candidate.id }}" class="candidate-radio">
+                    <label for="candidate-{{ candidate.id }}" class="candidate-label">
+                        <div class="candidate-avatar">
+                            {% if candidate.photo %}
+                            <img src="{{ candidate.photo.url }}" alt="{{ candidate.name }}">
+                            {% else %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="candidate-info">
+                            <h3>{{ candidate.name }}</h3>
+                            {% if candidate.bio %}
+                            <p>{{ candidate.bio }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="vote-indicator">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Selected</span>
+                        </div>
+                    </label>
+                </div>
+                {% empty %}
+                <div class="no-candidates">
+                    <p>No candidates available for this position.</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="voting-actions">
+                <a href="{% url 'position_selection' %}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> Submit Vote
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Enhance the candidate selection experience
+        document.addEventListener('DOMContentLoaded', function() {
+            const candidateCards = document.querySelectorAll('.candidate-card');
+            
+            candidateCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    candidateCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Check the radio button
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

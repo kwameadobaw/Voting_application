@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Student Voting System</title>
+    <link rel="stylesheet" href="{% static 'polls/css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container admin-dashboard">
+        <h1>Admin Dashboard</h1>
+        <div class="results-container">
+            {% for position in positions %}
+            <div class="position-results">
+                <h2>{{ position.title }}</h2>
+                <div class="chart-container">
+                    <canvas id="chart-{{ position.id }}"></canvas>
+                </div>
+                <div class="results-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Votes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-{{ position.id }}">
+                            <!-- Results will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="{% static 'polls/js/admin.js' %}"></script>
+</body>
+</html>

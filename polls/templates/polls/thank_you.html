@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Voting - Student Voting System</title>
+    <link rel="stylesheet" href="{% static 'polls/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container thank-you-container">
+        <div class="thank-you-card">
+            <div class="thank-you-header">
+                <div class="check-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Thank You for Voting!</h1>
+                <p>Your vote has been successfully recorded.</p>
+            </div>
+            
+            <div class="student-details">
+                <h2>Your Information</h2>
+                <div class="detail-item">
+                    <span class="detail-label">Name:</span>
+                    <span class="detail-value">{{ student.name }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Student ID:</span>
+                    <span class="detail-value">{{ student.student_id }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Voting Time:</span>
+                    <span class="detail-value">{{ voting_time }}</span>
+                </div>
+            </div>
+            
+            <div class="voting-summary">
+                <h2>Positions You Voted For</h2>
+                <div class="voted-positions">
+                    {% for vote in votes %}
+                    <div class="voted-position">
+                        <div class="position-name">{{ vote.position.title }}</div>
+                        <div class="candidate-name">{{ vote.candidate.name }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="thank-you-footer">
+                <a href="{% url 'login' %}" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <div class="confetti"></div>
+    </div>
+    
+    <script>
+        // Create confetti effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const confettiContainer = document.querySelector('.confetti');
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confettiContainer.appendChild(confetti);
+            }
+        });
+    </script>
+</body>
+</html>
