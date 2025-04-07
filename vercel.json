@@ -1,14 +1,18 @@
 {
   "builds": [
     {
-      "src": "New_Voting/wsgi.py",
+      "src": "voting_system/wsgi.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "New_Voting/wsgi.py"
+      "dest": "voting_system/wsgi.py"
     }
   ]
 }
