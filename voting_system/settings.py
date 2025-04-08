@@ -152,6 +152,11 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login URLs
-LOGIN_URL = '/admin-login/'
+LOGIN_URL = '/admin/login/'  # Changed to use Django's built-in admin login
 LOGIN_REDIRECT_URL = '/admin-dashboard/'
-LOGOUT_REDIRECT_URL = '/admin-login/'
+LOGOUT_REDIRECT_URL = '/admin/login/'  # Also updated this for consistency
+
+
+# Add or update these settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -26,9 +26,12 @@ class Position(models.Model):
     class Meta:
         ordering = ['order', 'title']
 
+# In your Candidate model, ensure you have:
 class Candidate(models.Model):
     name = models.CharField(max_length=100)
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    votes = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='candidates/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     # Replace ImageField with CharField for photo URL
     photo_url = models.CharField(max_length=255, blank=True, null=True)

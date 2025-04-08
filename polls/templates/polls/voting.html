@@ -29,30 +29,28 @@
             
             <div class="candidates-grid">
                 {% for candidate in candidates %}
-                <div class="candidate-card">
-                    <input type="radio" name="candidate" id="candidate-{{ candidate.id }}" value="{{ candidate.id }}" class="candidate-radio">
-                    <label for="candidate-{{ candidate.id }}" class="candidate-label">
-                        <div class="candidate-avatar">
-                            {% if candidate.photo %}
-                            <img src="{{ candidate.photo.url }}" alt="{{ candidate.name }}">
-                            {% else %}
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
+                <input type="radio" name="candidate" id="candidate-{{ candidate.id }}" value="{{ candidate.id }}" class="candidate-radio">
+                <label for="candidate-{{ candidate.id }}" class="candidate-label">
+                    <div class="candidate-card">
+                        {% if candidate.image %}
+                            <div class="candidate-image-container">
+                                <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}" class="candidate-image">
                             </div>
-                            {% endif %}
-                        </div>
-                        <div class="candidate-info">
-                            <h3>{{ candidate.name }}</h3>
-                            {% if candidate.bio %}
+                        {% else %}
+                            <div class="candidate-image-container">
+                                <img src="{% static 'polls/images/default-candidate.png' %}" alt="{{ candidate.name }}" class="candidate-image">
+                            </div>
+                        {% endif %}
+                        <h3>{{ candidate.name }}</h3>
+                        {% if candidate.bio %}
                             <p>{{ candidate.bio }}</p>
-                            {% endif %}
-                        </div>
+                        {% endif %}
                         <div class="vote-indicator">
                             <i class="fas fa-check-circle"></i>
                             <span>Selected</span>
                         </div>
-                    </label>
-                </div>
+                    </div>
+                </label>
                 {% empty %}
                 <div class="no-candidates">
                     <p>No candidates available for this position.</p>
