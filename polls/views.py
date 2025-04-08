@@ -266,9 +266,12 @@ def logout_results(request):
 
 
 @require_POST
-@user_passes_test(lambda u: u.is_staff)
 def reset_votes(request):
     """Reset all votes to zero"""
+    # Check if user is authorized to view results
+    if not request.session.get('results_authorized', False):
+        return JsonResponse({'success': False, 'message': 'Not authorized'}, status=403)
+    
     try:
         with transaction.atomic():
             # Reset candidate votes

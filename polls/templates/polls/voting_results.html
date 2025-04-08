@@ -83,24 +83,16 @@
                 
                 <div class="candidates-results">
                     {% for candidate in result.candidates %}
-                    <div class="candidate-result {% if forloop.first %}winner{% endif %}">
-                        <div class="candidate-rank">
-                            {% if forloop.first %}
-                            <i class="fas fa-trophy"></i>
-                            {% else %}
-                            {{ forloop.counter }}
-                            {% endif %}
-                        </div>
-                        <div class="candidate-info">
-                            <h3>{{ candidate.name }}</h3>
-                            <div class="vote-bar">
-                                <div class="vote-progress" style="width: {{ candidate.percentage|floatformat:1 }}%"></div>
-                            </div>
-                            <div class="vote-details">
-                                <span class="vote-count">{{ candidate.votes }} votes</span>
-                                <span class="vote-percentage">{{ candidate.percentage|floatformat:1 }}%</span>
-                            </div>
-                        </div>
+                    <!-- In your results display section -->
+                    <div class="candidate-result">
+                        {% if candidate.image %}
+                            <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}" class="candidate-image">
+                        {% else %}
+                            <img src="{% static 'polls/images/default-candidate.png' %}" alt="{{ candidate.name }}" class="candidate-image">
+                        {% endif %}
+                        <h3>{{ candidate.name }}</h3>
+                        <p>Votes: {{ candidate.votes }} ({{ candidate.percentage|floatformat:1 }}%)</p>
+                        <!-- other result details -->
                     </div>
                     {% endfor %}
                 </div>
