@@ -1,21 +1,18 @@
 {
-  "version": 2,
   "builds": [
     {
-      "src": "voting_system/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb" }
+      "src": "api/index.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "dest": "/staticfiles/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "voting_system/wsgi.py"
+      "dest": "api/index.py"
     }
-  ],
-  "outputDirectory": "staticfiles"
+  ]
 }
